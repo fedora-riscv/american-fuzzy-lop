@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
 Version:       0.50b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -43,7 +43,7 @@ say, common image parsing or file compression libraries.
 
 %package clang
 Summary:       Clang and clang++ support for %{name}
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Requires:      %{name} = %{version}-%{release}
 Requires:      clang
 
 
@@ -96,6 +96,9 @@ make \
 
 
 %changelog
+* Mon Nov 17 2014 Richard W.M. Jones <rjones@redhat.com> - 0.50b-2
+- Don't use epoch in requires.
+
 * Sun Nov 16 2014 Richard W.M. Jones <rjones@redhat.com> - 0.50b-1
 - New upstream version 0.50b.
 - Remove 'sed' dependency as it is no longer used.
