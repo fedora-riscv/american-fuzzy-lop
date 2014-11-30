@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
-Version:       0.50b
-Release:       2%{?dist}
+Version:       0.78b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -10,7 +10,7 @@ URL:           http://lcamtuf.coredump.cx/afl/
 Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
 
 # Allow CFLAGS to be appended.
-Patch1:        afl-0.50b-override-cflags.patch
+Patch1:        afl-0.78b-override-cflags.patch
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -59,27 +59,24 @@ This subpackage contains clang and clang++ support for
 
 
 %build
-make %{_smp_mflags} \
-    CFLAGS="%{optflags}" \
-    BIN_PATH=%{_bindir} \
-    HELPER_PATH=%{afl_helper_path} \
-    all
+%make_build \
+  CFLAGS="%{optflags}" \
+  PREFIX=%{_prefix} \
+  HELPER_PATH=%{afl_helper_path} \
+  DOC_PATH=%{_pkgdocdir}
 
 
 %install
-mkdir -p $RPM_BUILD_ROOT%{_bindir}
-mkdir -p $RPM_BUILD_ROOT%{afl_helper_path}
-make \
-    BIN_PATH=$RPM_BUILD_ROOT%{_bindir} \
-    HELPER_PATH=$RPM_BUILD_ROOT%{afl_helper_path} \
-    install
+%make_install \
+  PREFIX=%{_prefix} \
+  HELPER_PATH=%{afl_helper_path} \
+  DOC_PATH=%{_pkgdocdir} \
+  MISC_PATH=%{_pkgdocdir}
 
 
 %files
 %doc docs/*
-%doc experimental/crash_triage
-%doc experimental/distributed_fuzzing
-%doc experimental/minimization_script
+%doc experimental/
 %{_bindir}/afl-fuzz
 %{_bindir}/afl-gcc
 %{_bindir}/afl-g++
@@ -96,6 +93,9 @@ make \
 
 
 %changelog
+* Sun Nov 30 2014 Pádraig Brady <pbrady@redhat.com> - 0.78b-1
+- Latest upstream
+
 * Mon Nov 17 2014 Richard W.M. Jones <rjones@redhat.com> - 0.50b-2
 - Don't use epoch in requires.
 

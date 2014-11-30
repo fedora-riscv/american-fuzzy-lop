@@ -1,0 +1,12 @@
+diff -Naur afl-0.78b.orig/Makefile afl-0.78b/Makefile
+--- afl-0.78b.orig/Makefile	2014-11-30 07:42:28.000000000 +0000
++++ afl-0.78b/Makefile	2014-11-30 11:14:43.260885236 +0000
+@@ -25,7 +25,7 @@
+ PROGS       = afl-gcc afl-as afl-fuzz afl-showmap
+ 
+ CFLAGS     ?= -O3 -funroll-loops
+-CFLAGS     += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
++override CFLAGS += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
+ 	      -DAFL_PATH=\"$(HELPER_PATH)\" -DDOC_PATH=\"$(DOC_PATH)\" \
+ 	      -DVERSION=\"$(VERSION)\"
+ 
