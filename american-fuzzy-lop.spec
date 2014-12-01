@@ -59,7 +59,7 @@ This subpackage contains clang and clang++ support for
 
 
 %build
-%make_build \
+%{__make} %{?_smp_mflags} \
   CFLAGS="%{optflags}" \
   PREFIX=%{_prefix} \
   HELPER_PATH=%{afl_helper_path} \
