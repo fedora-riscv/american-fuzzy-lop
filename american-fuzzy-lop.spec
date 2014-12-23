@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       0.88b
+Version:       0.98b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -80,7 +80,7 @@ This subpackage contains clang and clang++ support for
 %{_bindir}/afl-fuzz
 %{_bindir}/afl-gcc
 %{_bindir}/afl-g++
-%{_bindir}/afl-plot.sh
+%{_bindir}/afl-plot
 %{_bindir}/afl-showmap
 %dir %{afl_helper_path}
 %{afl_helper_path}/afl-as
@@ -94,6 +94,10 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Tue Dec 23 2014 Richard W.M. Jones <rjones@redhat.com> - 0.98b-1
+- New upstream version 0.98b (RHBZ#1172581).
+- Rename afl-plot.sh script to afl-plot.
+
 * Mon Dec  8 2014 Richard W.M. Jones <rjones@redhat.com> - 0.88b-1
 - New upstream version 0.88b (RHBZ#1170943).
 - Add afl-plot.sh script.  This requires gnuplot, but it gives a
