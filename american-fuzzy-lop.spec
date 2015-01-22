@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       1.15b
+Version:       1.19b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -10,7 +10,7 @@ URL:           http://lcamtuf.coredump.cx/afl/
 Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
 
 # Allow CFLAGS to be appended.
-Patch1:        afl-0.78b-override-cflags.patch
+Patch1:        afl-1.19b-override-cflags.patch
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -82,6 +82,7 @@ This subpackage contains clang and clang++ support for
 %{_bindir}/afl-g++
 %{_bindir}/afl-plot
 %{_bindir}/afl-showmap
+%{_bindir}/afl-tmin
 %dir %{afl_helper_path}
 %{afl_helper_path}/afl-as
 %{afl_helper_path}/as
@@ -94,6 +95,9 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Thu Jan 22 2015 Pádraig Brady <pbrady@redhat.com> - 1.19b-1
+- Latest upstream
+
 * Mon Jan 19 2015 Richard W.M. Jones <rjones@redhat.com> - 1.15b-1
 - New upstream version 1.15b (RHBZ#1177434).
 
