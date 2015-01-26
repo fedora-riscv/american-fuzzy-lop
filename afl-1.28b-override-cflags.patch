@@ -1,8 +1,8 @@
-diff -Naur afl-1.19b.orig/Makefile afl-1.19b/Makefile
---- afl-1.19b.orig/Makefile	2014-11-30 07:42:28.000000000 +0000
-+++ afl-1.19b/Makefile	2014-11-30 11:14:43.260885236 +0000
+diff -Naur afl-1.28b.orig/Makefile afl-1.28b/Makefile
+--- afl-1.28b.orig/Makefile	2014-11-30 07:42:28.000000000 +0000
++++ afl-1.28b/Makefile	2014-11-30 11:14:43.260885236 +0000
 @@ -25,7 +25,7 @@
- PROGS       = afl-gcc afl-as afl-fuzz afl-showmap afl-tmin
+ PROGS       = afl-gcc afl-as afl-fuzz afl-showmap afl-tmin afl-gotcpu
  
  CFLAGS     ?= -O3 -funroll-loops
 -CFLAGS     += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
