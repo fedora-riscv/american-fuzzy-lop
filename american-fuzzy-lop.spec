@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       1.28b
+Version:       1.38b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -98,6 +98,9 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Tue Feb 03 2015 Pádraig Brady <pbrady@redhat.com> - 1.38b-1
+- Latest upstream
+
 * Mon Jan 26 2015 Pádraig Brady <pbrady@redhat.com> - 1.28b-1
 - Latest upstream
 
