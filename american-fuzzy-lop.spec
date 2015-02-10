@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       1.40b
+Version:       1.42b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -7,7 +7,15 @@ Summary:       Practical, instrumentation-driven fuzzer for binary formats
 License:       ASL 2.0
 
 URL:           http://lcamtuf.coredump.cx/afl/
-Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
+
+# NB: Upstream tarball contains a trademark "Hello Kitty" image.
+# https://bugzilla.redhat.com/show_bug.cgi?id=1191184
+# Therefore we do not include the original source tarball, but
+# we run the following script to remove the offending image:
+#   ./generate-tarball.sh %{version}
+# eg:
+#   ./generate-tarball.sh 1.42b
+Source0:       afl-%{version}-no-trademarks.tgz
 
 # Allow CFLAGS to be appended.
 Patch1:        afl-1.28b-override-cflags.patch
@@ -98,6 +106,11 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Tue Feb 10 2015 Richard W.M. Jones <rjones@redhat.com> - 1.42b-1
+- New upstream version 1.42b.
+- Remove trademarked image from source (RHBZ#1191184).
+- Use wildcard in .gitignore file.
+
 * Sat Feb  7 2015 Richard W.M. Jones <rjones@redhat.com> - 1.40b-1
 - New upstream version 1.40b (RHBZ#1188782).
 
