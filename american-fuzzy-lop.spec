@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
 Version:       1.71b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -106,6 +106,9 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Tue Jun 16 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.71b-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Thu Apr 23 2015 Richard W.M. Jones <rjones@redhat.com> - 1.71b-1
 - New upstream version 1.71b.
 
