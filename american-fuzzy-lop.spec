@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
-Version:       1.71b
-Release:       2%{?dist}
+Version:       1.88b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -8,14 +8,7 @@ License:       ASL 2.0
 
 URL:           http://lcamtuf.coredump.cx/afl/
 
-# NB: Upstream tarball contains a trademark "Hello Kitty" image.
-# https://bugzilla.redhat.com/show_bug.cgi?id=1191184
-# Therefore we do not include the original source tarball, but
-# we run the following script to remove the offending image:
-#   ./generate-tarball.sh %{version}
-# eg:
-#   ./generate-tarball.sh 1.42b
-Source0:       afl-%{version}-no-trademarks.tgz
+Source0:       afl-%{version}.tgz
 
 # Allow CFLAGS to be appended.
 Patch1:        afl-1.28b-override-cflags.patch
@@ -106,6 +99,9 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Mon Aug 31 2015 Pádraig Brady <pbrady@redhat.com> - 1.88b-1
+- Latest upstream
+
 * Tue Jun 16 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.71b-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
