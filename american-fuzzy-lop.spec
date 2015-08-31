@@ -78,6 +78,7 @@ This subpackage contains clang and clang++ support for
 %files
 %doc docs/*
 %doc experimental/
+%doc testcases/
 %{_bindir}/afl-fuzz
 %{_bindir}/afl-gcc
 %{_bindir}/afl-g++
