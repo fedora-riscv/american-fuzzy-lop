@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
-Version:       1.96b
-Release:       2%{?dist}
+Version:       2.00b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -11,7 +11,7 @@ URL:           http://lcamtuf.coredump.cx/afl/
 Source0:       afl-%{version}.tgz
 
 # Allow CFLAGS to be appended.
-Patch1:        afl-1.28b-override-cflags.patch
+Patch1:        afl-2.00b-override-cflags.patch
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -79,6 +79,8 @@ This subpackage contains clang and clang++ support for
 %doc docs/*
 %doc experimental/
 %doc testcases/
+%{_bindir}/afl-analyze
+%{_bindir}/afl-as
 %{_bindir}/afl-fuzz
 %{_bindir}/afl-gcc
 %{_bindir}/afl-g++
@@ -100,6 +102,11 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
+* Mon Feb 15 2016 Richard W.M. Jones <rjones@redhat.com> - 2.00b-1
+- New upstream version 2.00b (RHBZ#1306060).
+- Rebase CFLAGS override patch.
+- New programs afl-analyze, afl-as.
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.96b-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
