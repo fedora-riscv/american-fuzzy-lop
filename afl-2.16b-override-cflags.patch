@@ -1,0 +1,13 @@
+diff -ur afl-2.16b.old/Makefile afl-2.16b/Makefile
+--- afl-2.16b.old/Makefile	2016-06-24 03:35:35.000000000 +0100
++++ afl-2.16b/Makefile	2016-06-24 08:37:03.571052772 +0100
+@@ -28,7 +28,7 @@
+ SH_PROGS    = afl-plot afl-cmin afl-whatsup
+ 
+ CFLAGS     ?= -O3 -funroll-loops
+-CFLAGS     += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
++override CFLAGS += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
+ 	      -DAFL_PATH=\"$(HELPER_PATH)\" -DDOC_PATH=\"$(DOC_PATH)\" \
+ 	      -DBIN_PATH=\"$(BIN_PATH)\"
+ 
+Only in afl-2.16b: Makefile.orig
