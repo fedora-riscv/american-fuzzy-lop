@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
 Version:       2.33b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -11,7 +11,7 @@ URL:           http://lcamtuf.coredump.cx/afl/
 Source0:       afl-%{version}.tgz
 
 # Allow CFLAGS to be appended.
-Patch1:        afl-2.16b-override-cflags.patch
+Patch1:        afl-2.33b-extra-cflags.patch
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -61,7 +61,7 @@ This subpackage contains clang and clang++ support for
 
 %build
 %{__make} %{?_smp_mflags} \
-  CFLAGS="%{optflags}" \
+  EXTRA_CFLAGS="%{optflags}" \
   PREFIX=%{_prefix} \
   HELPER_PATH=%{afl_helper_path} \
   DOC_PATH=%{_pkgdocdir}
@@ -102,8 +102,9 @@ This subpackage contains clang and clang++ support for
 
 
 %changelog
-* Sat Aug 27 2016 Richard W.M. Jones <rjones@redhat.com> - 2.33b-1
+* Sat Aug 27 2016 Richard W.M. Jones <rjones@redhat.com> - 2.33b-2
 - New upstream version 2.33b (RHBZ#1350795).
+- Modify patch allowing CFLAGS to be appended.
 
 * Fri Jun 24 2016 Richard W.M. Jones <rjones@redhat.com> - 2.16b-1
 - New upstream version 2.16b (RHBZ#1336154).

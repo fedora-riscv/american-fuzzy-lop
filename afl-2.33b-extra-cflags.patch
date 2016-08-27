@@ -1,0 +1,12 @@
+--- afl-2.33b.old/Makefile	2016-08-07 08:03:02.000000000 +0100
++++ afl-2.33b/Makefile	2016-08-27 18:57:14.948950093 +0100
+@@ -30,7 +30,8 @@
+ CFLAGS     ?= -O3 -funroll-loops
+ CFLAGS     += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
+ 	      -DAFL_PATH=\"$(HELPER_PATH)\" -DDOC_PATH=\"$(DOC_PATH)\" \
+-	      -DBIN_PATH=\"$(BIN_PATH)\"
++	      -DBIN_PATH=\"$(BIN_PATH)\" \
++	      $(EXTRA_CFLAGS)
+ 
+ ifneq "$(filter Linux GNU%,$(shell uname))" ""
+   LDFLAGS  += -ldl
