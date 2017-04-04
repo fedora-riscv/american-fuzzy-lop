@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
-Version:       2.38b
-Release:       2%{?dist}
+Version:       2.40b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -97,6 +97,9 @@ CFLAGS="%{optflags}" \
 
 
 %changelog
+* Tue Apr  4 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40b-1
+- New upstream version 2.40b (RHBZ#1418875).
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.38b-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
