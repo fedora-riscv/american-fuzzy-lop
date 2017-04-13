@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.41b
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -13,6 +13,9 @@ License:       ASL 2.0
 URL:           http://lcamtuf.coredump.cx/afl/
 
 Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
+
+# For running the tests:
+Source1:       hello.c
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -108,6 +111,24 @@ popd
   MISC_PATH="%{_pkgdocdir}" \
 
 
+%check
+# This just checks that simple programs can be compiled using
+# the compiler wrappers.
+ln -s %{SOURCE1} hello.cpp
+./afl-gcc %{SOURCE1} -o hello
+./hello
+./afl-g++ hello.cpp -o hello
+./hello
+./afl-clang %{SOURCE1} -o hello
+./hello
+./afl-clang++ hello.cpp -o hello
+./hello
+./afl-clang-fast %{SOURCE1} -o hello
+./hello
+./afl-clang-fast++ hello.cpp -o hello
+./hello
+
+
 %files
 %doc docs/*
 %doc dictionaries/
@@ -152,6 +173,7 @@ popd
 - New upstream version 2.41b (RHBZ#1441654).
 - Fix Source URL.
 - Compile afl-clang-fast (in a new subpackage).
+- Add a simple check section.
 
 * Tue Apr  4 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40b-1
 - New upstream version 2.40b (RHBZ#1418875).
