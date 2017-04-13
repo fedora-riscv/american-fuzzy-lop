@@ -8,7 +8,7 @@ License:       ASL 2.0
 
 URL:           http://lcamtuf.coredump.cx/afl/
 
-Source0:       afl-%{version}.tgz
+Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
 
 # Upstream includes armv7hl support as some non-integrated 'contrib'
 # files, so I have not enabled it here.  No other arch is supported
@@ -99,6 +99,7 @@ CFLAGS="%{optflags}" \
 %changelog
 * Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-1
 - New upstream version 2.41b (RHBZ#1441654).
+- Fix Source URL.
 
 * Tue Apr  4 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40b-1
 - New upstream version 2.40b (RHBZ#1418875).
