@@ -139,8 +139,11 @@ popd
 %{_bindir}/afl-clang-fast
 %{_bindir}/afl-clang-fast++
 %{afl_helper_path}/afl-llvm-pass.so
+%if 0%{?__isa_bits} == 32
 %{afl_helper_path}/afl-llvm-rt-32.o
+%else
 %{afl_helper_path}/afl-llvm-rt-64.o
+%endif
 %{afl_helper_path}/afl-llvm-rt.o
 
 
