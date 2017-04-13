@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       2.40b
+Version:       2.41b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -97,6 +97,9 @@ CFLAGS="%{optflags}" \
 
 
 %changelog
+* Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-1
+- New upstream version 2.41b (RHBZ#1441654).
+
 * Tue Apr  4 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40b-1
 - New upstream version 2.40b (RHBZ#1418875).
 
