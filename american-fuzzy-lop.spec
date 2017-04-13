@@ -1,6 +1,10 @@
+# TEMPORARILY disable debuginfo generation.  See:
+# https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/BTEWK55VB2NQF6L7P2BL5HT2VYIY6S75/
+%global debug_package %{nil}
+
 Name:          american-fuzzy-lop
 Version:       2.41b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -16,11 +20,16 @@ Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
 ExclusiveArch: %{ix86} x86_64
 
 BuildRequires: clang
+BuildRequires: llvm-devel
 
 Requires:      gcc
 
-
 %global afl_helper_path %{_libdir}/afl
+%if %{__isa_bits} == 32
+%global llvm_config %{_bindir}/llvm-config-32
+%else
+%global llvm_config %{_bindir}/llvm-config-64
+%endif
 
 
 %description
@@ -50,24 +59,53 @@ This subpackage contains clang and clang++ support for
 %{name}.
 
 
+%package clang-fast
+Summary:       Fast clang and clang++ support for %{name}
+Requires:      %{name} = %{version}-%{release}
+Requires:      clang
+
+
+%description clang-fast
+This subpackage contains fast clang and clang++ support for
+%{name}.
+
+The code in this package allows you to instrument programs for AFL using
+true compiler-level instrumentation, instead of the more crude
+assembly-level rewriting approach taken by afl-gcc and afl-clang.
+
+
 %prep
 %setup -q -n afl-%{version}
 
 
 %build
+
 CFLAGS="%{optflags}" \
 %{__make} %{?_smp_mflags} \
-  PREFIX=%{_prefix} \
-  HELPER_PATH=%{afl_helper_path} \
-  DOC_PATH=%{_pkgdocdir}
+  PREFIX="%{_prefix}" \
+  HELPER_PATH="%{afl_helper_path}" \
+  DOC_PATH="%{_pkgdocdir}" \
+  MISC_PATH="%{_pkgdocdir}"
+
+# Build afl-clang-fast.
+pushd llvm_mode
+CFLAGS="%{optflags}" \
+%{__make} %{?_smp_mflags} \
+  PREFIX="%{_prefix}" \
+  HELPER_PATH="%{afl_helper_path}" \
+  DOC_PATH="%{_pkgdocdir}" \
+  MISC_PATH="%{_pkgdocdir}" \
+  LLVM_CONFIG="%{llvm_config}"
+
+popd
 
 
 %install
-%make_install \
-  PREFIX=%{_prefix} \
-  HELPER_PATH=%{afl_helper_path} \
-  DOC_PATH=%{_pkgdocdir} \
-  MISC_PATH=%{_pkgdocdir}
+%{make_install} \
+  PREFIX="%{_prefix}" \
+  HELPER_PATH="%{afl_helper_path}" \
+  DOC_PATH="%{_pkgdocdir}" \
+  MISC_PATH="%{_pkgdocdir}" \
 
 
 %files
@@ -96,10 +134,21 @@ CFLAGS="%{optflags}" \
 %{_bindir}/afl-clang++
 
 
+%files clang-fast
+%doc docs/COPYING llvm_mode/README.llvm
+%{_bindir}/afl-clang-fast
+%{_bindir}/afl-clang-fast++
+%{afl_helper_path}/afl-llvm-pass.so
+%{afl_helper_path}/afl-llvm-rt-32.o
+%{afl_helper_path}/afl-llvm-rt-64.o
+%{afl_helper_path}/afl-llvm-rt.o
+
+
 %changelog
-* Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-1
+* Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-2
 - New upstream version 2.41b (RHBZ#1441654).
 - Fix Source URL.
+- Compile afl-clang-fast (in a new subpackage).
 
 * Tue Apr  4 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40b-1
 - New upstream version 2.40b (RHBZ#1418875).
