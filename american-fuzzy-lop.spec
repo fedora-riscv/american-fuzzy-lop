@@ -1,10 +1,6 @@
-# TEMPORARILY disable debuginfo generation.  See:
-# https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/BTEWK55VB2NQF6L7P2BL5HT2VYIY6S75/
-%global debug_package %{nil}
-
 Name:          american-fuzzy-lop
 Version:       2.41b
-Release:       3%{?dist}
+Release:       4%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -108,7 +104,11 @@ popd
   PREFIX="%{_prefix}" \
   HELPER_PATH="%{afl_helper_path}" \
   DOC_PATH="%{_pkgdocdir}" \
-  MISC_PATH="%{_pkgdocdir}" \
+  MISC_PATH="%{_pkgdocdir}"
+
+# Otherwise we see:
+# ERROR: No build ID note found in <.o file>
+chmod -x $RPM_BUILD_ROOT%{afl_helper_path}/*.o
 
 
 %check
@@ -169,7 +169,7 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
-* Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-2
+* Thu Apr 13 2017 Richard W.M. Jones <rjones@redhat.com> - 2.41b-4
 - New upstream version 2.41b (RHBZ#1441654).
 - Fix Source URL.
 - Compile afl-clang-fast (in a new subpackage).
