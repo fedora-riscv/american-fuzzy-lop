@@ -25,7 +25,7 @@ BuildRequires: llvm-devel
 Requires:      gcc
 
 %global afl_helper_path %{_libdir}/afl
-%if %{__isa_bits} == 32
+%if 0%{?__isa_bits} == 32
 %global llvm_config %{_bindir}/llvm-config-32
 %else
 %global llvm_config %{_bindir}/llvm-config-64
