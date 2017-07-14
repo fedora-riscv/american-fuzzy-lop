@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       2.46b
+Version:       2.47b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -7,7 +7,6 @@ Summary:       Practical, instrumentation-driven fuzzer for binary formats
 License:       ASL 2.0
 
 URL:           http://lcamtuf.coredump.cx/afl/
-
 Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
 
 # For running the tests:
@@ -169,8 +168,11 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Fri Jul 14 2017 Richard W.M. Jones <rjones@redhat.com> - 2.47b-1
+- New upstream version 2.47b (RHBZ#1470893).
+
 * Tue Jul 11 2017 Richard W.M. Jones <rjones@redhat.com> - 2.46b-1
-- New upstream version 2.44b (RHBZ#1467746).
+- New upstream version 2.46b (RHBZ#1467746).
 
 * Thu Jun 29 2017 Richard W.M. Jones <rjones@redhat.com> - 2.44b-1
 - New upstream version 2.44b (RHBZ#1458261).
