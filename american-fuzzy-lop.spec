@@ -1,5 +1,5 @@
 Name:          american-fuzzy-lop
-Version:       2.47b
+Version:       2.49b
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -168,6 +168,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Wed Jul 19 2017 Richard W.M. Jones <rjones@redhat.com> - 2.49b-1
+- New upstream version 2.49b (RHBZ#1472016).
+
 * Fri Jul 14 2017 Richard W.M. Jones <rjones@redhat.com> - 2.47b-1
 - New upstream version 2.47b (RHBZ#1470893).
 
