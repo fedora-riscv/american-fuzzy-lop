@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
 Version:       2.52b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -168,6 +168,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.52b-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Nov 06 2017 Richard W.M. Jones <rjones@redhat.com> - 2.52b-1
 - New upstream version 2.52b (RHBZ#1509729).
 
