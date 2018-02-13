@@ -23,11 +23,6 @@ BuildRequires: llvm-devel
 Requires:      gcc
 
 %global afl_helper_path %{_libdir}/afl
-%if 0%{?__isa_bits} == 32
-%global llvm_config %{_bindir}/llvm-config-32
-%else
-%global llvm_config %{_bindir}/llvm-config-64
-%endif
 
 
 %description
@@ -87,6 +82,20 @@ CFLAGS="%{optflags}" \
 
 # Build afl-clang-fast.
 pushd llvm_mode
+
+# Build llvm-config wrapper around the right binary for this arch.
+%if 0%{?__isa_bits} == 32
+%global llvm_config %{_bindir}/llvm-config-32
+%else
+%global llvm_config %{_bindir}/llvm-config-64
+%endif
+rm -f llvm-config
+cat > llvm-config <<'EOF'
+#!/bin/sh
+%{llvm_config} "$@" | sed 's/-mcet -fcf-protection//'
+EOF
+chmod 0755 llvm-config
+
 # RPM flags include -mcet -fcf-protection which clang does not
 # understand, so we have to remove them for now. XXX
 fixed_cflags="$(echo %{optflags} | sed 's/-mcet -fcf-protection//')"
@@ -96,7 +105,7 @@ CFLAGS="$fixed_cflags" \
   HELPER_PATH="%{afl_helper_path}" \
   DOC_PATH="%{_pkgdocdir}" \
   MISC_PATH="%{_pkgdocdir}" \
-  LLVM_CONFIG="%{llvm_config}"
+  LLVM_CONFIG="$(pwd)/llvm-config"
 
 popd
 
