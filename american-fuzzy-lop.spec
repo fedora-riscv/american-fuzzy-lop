@@ -87,7 +87,10 @@ CFLAGS="%{optflags}" \
 
 # Build afl-clang-fast.
 pushd llvm_mode
-CFLAGS="%{optflags}" \
+# RPM flags include -mcet -fcf-protection which clang does not
+# understand, so we have to remove them for now. XXX
+fixed_cflags="$(echo %{optflags} | sed 's/-mcet -fcf-protection//')"
+CFLAGS="$fixed_cflags" \
 %{__make} %{?_smp_mflags} \
   PREFIX="%{_prefix}" \
   HELPER_PATH="%{afl_helper_path}" \
