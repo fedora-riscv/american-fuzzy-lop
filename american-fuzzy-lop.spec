@@ -1,6 +1,6 @@
 Name:          american-fuzzy-lop
 Version:       2.52b
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -180,6 +180,10 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Wed Mar 07 2018 Adam Williamson <awilliam@redhat.com> - 2.52b-3
+- Rebuild to fix GCC 8 mis-compilation
+  See https://da.gd/YJVwk ("GCC 8 ABI change on x86_64")
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.52b-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
