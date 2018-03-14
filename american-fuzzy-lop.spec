@@ -97,13 +97,18 @@ pushd llvm_mode
 rm -f llvm-config
 cat > llvm-config <<'EOF'
 #!/bin/sh
-%{llvm_config} "$@" | sed 's/-mcet -fcf-protection//'
+%{llvm_config} "$@" | sed -e 's/-mcet//g' -e 's/-fcf-protection//g'
 EOF
 chmod 0755 llvm-config
+cat ./llvm-config
+./llvm-config --cflags
+./llvm-config --cxxflags
+./llvm-config --ldflags
 
 # RPM flags include -mcet -fcf-protection which clang does not
 # understand, so we have to remove them for now. XXX
-fixed_cflags="$(echo %{optflags} | sed 's/-mcet -fcf-protection//')"
+fixed_cflags="$(echo %{optflags} |
+                     sed -e 's/-mcet//g' -e 's/-fcf-protection//g')"
 CFLAGS="$fixed_cflags" \
 %{__make} %{?_smp_mflags} \
   PREFIX="%{_prefix}" \
@@ -187,6 +192,7 @@ ln -s %{SOURCE1} hello.cpp
 %changelog
 * Wed Mar 14 2018 Richard W.M. Jones <rjones@redhat.com> - 2.52b-4
 - Depend on clang(major) exact version (see RHBZ#1547444 RHBZ#1544964).
+- Fix C++ flags passed to clang++ to remove GCC-isms.
 
 * Wed Mar 07 2018 Adam Williamson <awilliam@redhat.com> - 2.52b-3
 - Rebuild to fix GCC 8 mis-compilation
