@@ -1,6 +1,11 @@
+# We need to rebuild this package every time the clang major version
+# changes, since clang releases are not ABI compatible between major
+# versions.  See also https://bugzilla.redhat.com/1544964
+%global clang_major 6
+
 Name:          american-fuzzy-lop
 Version:       2.52b
-Release:       3%{?dist}
+Release:       4%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -17,7 +22,7 @@ Source1:       hello.c
 # without arch-specific changes.
 ExclusiveArch: %{ix86} x86_64
 
-BuildRequires: clang
+BuildRequires: clang(major) = %{clang_major}
 BuildRequires: llvm-devel
 
 Requires:      gcc
@@ -44,7 +49,7 @@ say, common image parsing or file compression libraries.
 %package clang
 Summary:       Clang and clang++ support for %{name}
 Requires:      %{name} = %{version}-%{release}
-Requires:      clang
+Requires:      clang(major) = %{clang_major}
 
 
 %description clang
@@ -55,7 +60,7 @@ This subpackage contains clang and clang++ support for
 %package clang-fast
 Summary:       Fast clang and clang++ support for %{name}
 Requires:      %{name} = %{version}-%{release}
-Requires:      clang
+Requires:      clang(major) = %{clang_major}
 
 
 %description clang-fast
@@ -180,6 +185,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Wed Mar 14 2018 Richard W.M. Jones <rjones@redhat.com> - 2.52b-4
+- Depend on clang(major) exact version (see RHBZ#1547444 RHBZ#1544964).
+
 * Wed Mar 07 2018 Adam Williamson <awilliam@redhat.com> - 2.52b-3
 - Rebuild to fix GCC 8 mis-compilation
   See https://da.gd/YJVwk ("GCC 8 ABI change on x86_64")
