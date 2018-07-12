@@ -5,7 +5,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.52b
-Release:       4%{?dist}
+Release:       5%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -190,6 +190,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.52b-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Wed Mar 14 2018 Richard W.M. Jones <rjones@redhat.com> - 2.52b-4
 - Depend on clang(major) exact version (see RHBZ#1547444 RHBZ#1544964).
 - Fix C++ flags passed to clang++ to remove GCC-isms.
