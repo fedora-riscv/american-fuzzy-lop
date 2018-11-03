@@ -1,7 +1,7 @@
 # We need to rebuild this package every time the clang major version
 # changes, since clang releases are not ABI compatible between major
 # versions.  See also https://bugzilla.redhat.com/1544964
-%global clang_major 6
+%global clang_major 7
 
 Name:          american-fuzzy-lop
 Version:       2.52b
