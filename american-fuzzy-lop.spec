@@ -1,18 +1,18 @@
 # We need to rebuild this package every time the clang major version
 # changes, since clang releases are not ABI compatible between major
 # versions.  See also https://bugzilla.redhat.com/1544964
-%global clang_major 7
+%global clang_major 8
 
 Name:          american-fuzzy-lop
-Version:       2.52b
-Release:       8%{?dist}
+Version:       2.53b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
 License:       ASL 2.0
 
 URL:           http://lcamtuf.coredump.cx/afl/
-Source0:       http://lcamtuf.coredump.cx/afl/releases/afl-%{version}.tgz
+Source0:       https://github.com/google/AFL/archive/v%{version}.tar.gz
 
 # For running the tests:
 Source1:       hello.c
@@ -73,7 +73,7 @@ assembly-level rewriting approach taken by afl-gcc and afl-clang.
 
 
 %prep
-%setup -q -n afl-%{version}
+%setup -q -n AFL-%{version}
 
 
 %build
@@ -88,6 +88,10 @@ CFLAGS="%{optflags}" \
 # Build afl-clang-fast.
 pushd llvm_mode
 
+# RPM flags include -mcet -fcf-protection which clang does not
+# understand, so we have to remove them for now. XXX
+%global flag_filter sed -e 's/-mcet//g' -e 's/-fcf-protection//g' -e 's/-fstack-clash-protection//g'
+
 # Build llvm-config wrapper around the right binary for this arch.
 %if 0%{?__isa_bits} == 32
 %global llvm_config %{_bindir}/llvm-config-32
@@ -97,7 +101,7 @@ pushd llvm_mode
 rm -f llvm-config
 cat > llvm-config <<'EOF'
 #!/bin/sh
-%{llvm_config} "$@" | sed -e 's/-mcet//g' -e 's/-fcf-protection//g'
+%{llvm_config} "$@" | %{flag_filter}
 EOF
 chmod 0755 llvm-config
 cat ./llvm-config
@@ -105,10 +109,7 @@ cat ./llvm-config
 ./llvm-config --cxxflags
 ./llvm-config --ldflags
 
-# RPM flags include -mcet -fcf-protection which clang does not
-# understand, so we have to remove them for now. XXX
-fixed_cflags="$(echo %{optflags} |
-                     sed -e 's/-mcet//g' -e 's/-fcf-protection//g')"
+fixed_cflags="$(echo %{optflags} | %{flag_filter})"
 CFLAGS="$fixed_cflags" \
 %{__make} %{?_smp_mflags} \
   PREFIX="%{_prefix}" \
@@ -130,6 +131,12 @@ popd
 # Otherwise we see:
 # ERROR: No build ID note found in <.o file>
 chmod -x $RPM_BUILD_ROOT%{afl_helper_path}/*.o
+
+# This file is created when I build locally, but not when I build in
+# Koji.  Remove it so I can build locally.
+%if 0%{?__isa_bits} == 64
+rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-llvm-rt-32.o
+%endif
 
 
 %check
@@ -190,6 +197,12 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Wed Jul 31 2019 Richard W.M. Jones <rjones@redhat.com> - 2.53b-1
+- New upstream release 2.53b.
+- Change Source URL for new hosting location.
+- Compile against clang 8.
+- Filter out -fstack-clash-protection from clang.
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.52b-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
