@@ -1,6 +1,9 @@
 # We need to rebuild this package every time the clang major version
 # changes, since clang releases are not ABI compatible between major
 # versions.  See also https://bugzilla.redhat.com/1544964
+%if 0%{?fedora} >= 31
+%global clang_major 9
+%endif
 %if 0%{?fedora} >= 30
 %global clang_major 8
 %endif
@@ -12,8 +15,8 @@
 %endif
 
 Name:          american-fuzzy-lop
-Version:       2.53b
-Release:       2%{?dist}
+Version:       2.56b
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -205,6 +208,10 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Tue Jan 28 2020 Richard W.M. Jones <rjones@redhat.com> - 2.56b-1
+- New upstream version 2.56b.
+- New clang version 9 in Fedora >= 31.
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.53b-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
