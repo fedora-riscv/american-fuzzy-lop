@@ -13,7 +13,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.53b
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -205,6 +205,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.53b-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Wed Jul 31 2019 Richard W.M. Jones <rjones@redhat.com> - 2.53b-1
 - New upstream release 2.53b.
 - Change Source URL for new hosting location.
