@@ -19,7 +19,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.56b
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -91,6 +91,10 @@ assembly-level rewriting approach taken by afl-gcc and afl-clang.
 
 
 %build
+# This package appears to be failing because links to the LLVM plugins
+# are not installed which results in the tools not being able to
+# interpret the .o/.a files.  Disable LTO for now
+%define _lto_cflags %{nil}
 
 CFLAGS="%{optflags}" \
 %{__make} %{?_smp_mflags} \
@@ -211,6 +215,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Sat Jul 11 2020 Jeff Law <law@redhat.com> - 2.56b-3
+- Disable LTO
+
 * Sat Mar 14 2020 Richard W.M. Jones <rjones@redhat.com> - 2.56b-2
 - Clang 10 in Fedora 32+ (RHBZ#1813541).
 
