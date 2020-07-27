@@ -19,7 +19,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.56b
-Release:       3%{?dist}
+Release:       4%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -215,6 +215,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.56b-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Sat Jul 11 2020 Jeff Law <law@redhat.com> - 2.56b-3
 - Disable LTO
 
