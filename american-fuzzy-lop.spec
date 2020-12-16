@@ -41,6 +41,7 @@ ExclusiveArch: %{ix86} x86_64
 
 BuildRequires: clang(major) = %{clang_major}
 BuildRequires: llvm-devel
+BuildRequires: make
 
 Requires:      gcc
 
