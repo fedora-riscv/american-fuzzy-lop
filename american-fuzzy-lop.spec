@@ -22,7 +22,7 @@
 
 Name:          american-fuzzy-lop
 Version:       2.56b
-Release:       5%{?dist}
+Release:       6%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -219,6 +219,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.56b-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Aug 21 2020 Richard W.M. Jones <rjones@redhat.com> - 2.56b-5
 - Clang 11 in Fedora 33+ (RHBZ#1870933).
 
