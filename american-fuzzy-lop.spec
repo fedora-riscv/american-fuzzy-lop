@@ -4,7 +4,7 @@
 %if 0%{?fedora} >= 34
 %global clang_major 12
 %endif
-%if 0%{?fedora} >= 33
+%if 0%{?fedora} == 33
 %global clang_major 11
 %endif
 %if 0%{?fedora} == 32
