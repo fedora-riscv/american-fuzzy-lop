@@ -24,15 +24,15 @@
 %endif
 
 Name:          american-fuzzy-lop
-Version:       2.57b
+Version:       3.10c
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
 License:       ASL 2.0
 
-URL:           http://lcamtuf.coredump.cx/afl/
-Source0:       https://github.com/google/AFL/archive/v%{version}.tar.gz
+URL:           https://aflplus.plus/
+Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/3.10c.tar.gz
 
 # For running the tests:
 Source1:       hello.c
@@ -78,23 +78,8 @@ This subpackage contains clang and clang++ support for
 %{name}.
 
 
-%package clang-fast
-Summary:       Fast clang and clang++ support for %{name}
-Requires:      %{name} = %{version}-%{release}
-Requires:      clang(major) = %{clang_major}
-
-
-%description clang-fast
-This subpackage contains fast clang and clang++ support for
-%{name}.
-
-The code in this package allows you to instrument programs for AFL using
-true compiler-level instrumentation, instead of the more crude
-assembly-level rewriting approach taken by afl-gcc and afl-clang.
-
-
 %prep
-%setup -q -n AFL-%{version}
+%setup -q -n AFLplusplus-%{version}
 
 
 %build
@@ -108,42 +93,9 @@ CFLAGS="%{optflags}" \
   PREFIX="%{_prefix}" \
   HELPER_PATH="%{afl_helper_path}" \
   DOC_PATH="%{_pkgdocdir}" \
-  MISC_PATH="%{_pkgdocdir}"
-
-# Build afl-clang-fast.
-pushd llvm_mode
-
-# RPM flags include -mcet -fcf-protection which clang does not
-# understand, so we have to remove them for now. XXX
-%global flag_filter sed -e 's/-mcet//g' -e 's/-fcf-protection//g' -e 's/-fstack-clash-protection//g'
-
-# Build llvm-config wrapper around the right binary for this arch.
-%if 0%{?__isa_bits} == 32
-%global llvm_config %{_bindir}/llvm-config-32
-%else
-%global llvm_config %{_bindir}/llvm-config-64
-%endif
-rm -f llvm-config
-cat > llvm-config <<'EOF'
-#!/bin/sh
-%{llvm_config} "$@" | %{flag_filter}
-EOF
-chmod 0755 llvm-config
-cat ./llvm-config
-./llvm-config --cflags
-./llvm-config --cxxflags
-./llvm-config --ldflags
-
-fixed_cflags="$(echo %{optflags} | %{flag_filter})"
-CFLAGS="$fixed_cflags" \
-%{__make} %{?_smp_mflags} \
-  PREFIX="%{_prefix}" \
-  HELPER_PATH="%{afl_helper_path}" \
-  DOC_PATH="%{_pkgdocdir}" \
+  MAN_PATH="%{_mandir}/man8" \
   MISC_PATH="%{_pkgdocdir}" \
-  LLVM_CONFIG="$(pwd)/llvm-config"
-
-popd
+  source-only
 
 
 %install
@@ -151,6 +103,7 @@ popd
   PREFIX="%{_prefix}" \
   HELPER_PATH="%{afl_helper_path}" \
   DOC_PATH="%{_pkgdocdir}" \
+  MAN_PATH="%{_mandir}/man8" \
   MISC_PATH="%{_pkgdocdir}"
 
 # Otherwise we see:
@@ -160,8 +113,12 @@ chmod -x $RPM_BUILD_ROOT%{afl_helper_path}/*.o
 # This file is created when I build locally, but not when I build in
 # Koji.  Remove it so I can build locally.
 %if 0%{?__isa_bits} == 64
+rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-compiler-rt-32.o
 rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-llvm-rt-32.o
 %endif
+
+# Remove docs since we will package them using %%doc.
+mv $RPM_BUILD_ROOT%{_pkgdocdir} pkg-docs
 
 
 %check
@@ -183,45 +140,79 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %files
-%doc docs/*
-%doc dictionaries/
-%doc experimental/
-%doc testcases/
+%license docs/COPYING
+%doc pkg-docs/*
 %{_bindir}/afl-analyze
+%{_bindir}/afl-cc
+   /usr/bin/afl-c++
+%{_bindir}/afl-cmin
+%{_bindir}/afl-cmin.bash
 %{_bindir}/afl-fuzz
-%{_bindir}/afl-gcc
-%{_bindir}/afl-g++
+   /usr/bin/afl-g++
+   /usr/bin/afl-gcc
+%{_bindir}/afl-gotcpu
 %{_bindir}/afl-plot
 %{_bindir}/afl-showmap
+%{_bindir}/afl-system-config
 %{_bindir}/afl-tmin
-%{_bindir}/afl-cmin
-%{_bindir}/afl-gotcpu
 %{_bindir}/afl-whatsup
 %dir %{afl_helper_path}
 %{afl_helper_path}/afl-as
 %{afl_helper_path}/as
+%if 0%{?__isa_bits} == 32
+%{afl_helper_path}/afl-compiler-rt-32.o
+%else
+%{afl_helper_path}/afl-compiler-rt-64.o
+%endif
+%{afl_helper_path}/afl-compiler-rt.o
+%{_mandir}/man8/afl-analyze.8*
+%{_mandir}/man8/afl-as.8*
+%{_mandir}/man8/afl-c++.8*
+%{_mandir}/man8/afl-cc.8*
+%{_mandir}/man8/afl-cmin.8*
+%{_mandir}/man8/afl-cmin.bash.8*
+%{_mandir}/man8/afl-fuzz.8*
+%{_mandir}/man8/afl-gotcpu.8*
+%{_mandir}/man8/afl-plot.8*
+%{_mandir}/man8/afl-showmap.8*
+%{_mandir}/man8/afl-system-config.8*
+%{_mandir}/man8/afl-tmin.8*
+%{_mandir}/man8/afl-whatsup.8*
 
 
 %files clang
-%doc docs/COPYING
+%license docs/COPYING
 %{_bindir}/afl-clang
 %{_bindir}/afl-clang++
-
-
-%files clang-fast
-%doc docs/COPYING llvm_mode/README.llvm
 %{_bindir}/afl-clang-fast
 %{_bindir}/afl-clang-fast++
-%{afl_helper_path}/afl-llvm-pass.so
 %if 0%{?__isa_bits} == 32
 %{afl_helper_path}/afl-llvm-rt-32.o
 %else
 %{afl_helper_path}/afl-llvm-rt-64.o
 %endif
 %{afl_helper_path}/afl-llvm-rt.o
+%{afl_helper_path}/afl-llvm-dict2file.so
+%{afl_helper_path}/afl-llvm-pass.so
+%{afl_helper_path}/cmplog-instructions-pass.so
+%{afl_helper_path}/cmplog-routines-pass.so
+%{afl_helper_path}/compare-transform-pass.so
+%{afl_helper_path}/dynamic_list.txt
+%{afl_helper_path}/libAFLDriver.a*
+%{afl_helper_path}/libAFLQemuDriver.a
+%{afl_helper_path}/libLLVMInsTrim.so
+%{afl_helper_path}/libdislocator.so
+%{afl_helper_path}/libtokencap.so
+%{afl_helper_path}/SanitizerCoveragePCGUARD.so
+%{afl_helper_path}/split-compares-pass.so
+%{afl_helper_path}/split-switches-pass.so
 
 
 %changelog
+* Mon Mar 15 2021 Richard W.M. Jones <rjones@redhat.com> - 3.10c-1
+- Switch to fork AFL++, see discussion on Fedora devel list.
+- New upstream version 3.10c (RHBZ#1938600).
+
 * Tue Feb 23 2021 Richard W.M. Jones <rjones@redhat.com> - 2.57b-1
 - New upstream version 2.57b.
 - Clang 12 in Fedora 34+ (RHBZ#1932050).
