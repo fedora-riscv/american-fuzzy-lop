@@ -24,7 +24,7 @@
 %endif
 
 Name:          american-fuzzy-lop
-Version:       3.10c
+Version:       3.11c
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -32,7 +32,7 @@ Summary:       Practical, instrumentation-driven fuzzer for binary formats
 License:       ASL 2.0
 
 URL:           https://aflplus.plus/
-Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/3.10c.tar.gz
+Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
 
 # For running the tests:
 Source1:       hello.c
@@ -209,6 +209,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Tue Mar 16 2021 Richard W.M. Jones <rjones@redhat.com> - 3.11c-1
+- New upstream version 3.11c (RHBZ#1939443).
+
 * Mon Mar 15 2021 Richard W.M. Jones <rjones@redhat.com> - 3.10c-1
 - Switch to fork AFL++, see discussion on Fedora devel list.
 - New upstream version 3.10c (RHBZ#1938600).
