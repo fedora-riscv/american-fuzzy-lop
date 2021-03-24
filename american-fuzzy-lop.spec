@@ -24,7 +24,7 @@
 %endif
 
 Name:          american-fuzzy-lop
-Version:       3.11c
+Version:       3.12c
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -206,9 +206,15 @@ ln -s %{SOURCE1} hello.cpp
 %{afl_helper_path}/SanitizerCoveragePCGUARD.so
 %{afl_helper_path}/split-compares-pass.so
 %{afl_helper_path}/split-switches-pass.so
+%{_mandir}/man8/afl-clang-fast.8*
+%{_mandir}/man8/afl-clang-fast++.8*
 
 
 %changelog
+* Wed Mar 24 2021 Richard W.M. Jones <rjones@redhat.com> - 3.12c-1
+- New upstream version 3.12c (RHBZ#1942625).
+- Add afl-clang-fast(8) and afl-clang-fast++(8) man pages.
+
 * Tue Mar 16 2021 Richard W.M. Jones <rjones@redhat.com> - 3.11c-1
 - New upstream version 3.11c (RHBZ#1939443).
 
