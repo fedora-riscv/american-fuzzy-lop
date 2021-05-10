@@ -25,7 +25,7 @@
 
 Name:          american-fuzzy-lop
 Version:       3.12c
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -211,6 +211,9 @@ ln -s %{SOURCE1} hello.cpp
 
 
 %changelog
+* Mon May 10 2021 Jonathan Wakely <jwakely@redhat.com> - 3.12c-2
+- Rebuilt for removed libstdc++ symbols (#1937698)
+
 * Wed Mar 24 2021 Richard W.M. Jones <rjones@redhat.com> - 3.12c-1
 - New upstream version 3.12c (RHBZ#1942625).
 - Add afl-clang-fast(8) and afl-clang-fast++(8) man pages.
