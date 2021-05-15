@@ -1,27 +1,6 @@
 # We need to rebuild this package every time the clang major version
 # changes, since clang releases are not ABI compatible between major
-# versions.  See also https://bugzilla.redhat.com/1544964
-%if 0%{?fedora} >= 34
-%global clang_major 12
-%endif
-%if 0%{?fedora} == 33
-%global clang_major 11
-%endif
-%if 0%{?fedora} == 32
-%global clang_major 10
-%endif
-%if 0%{?fedora} == 31
-%global clang_major 9
-%endif
-%if 0%{?fedora} == 30
-%global clang_major 8
-%endif
-%if 0%{?fedora} == 29
-%global clang_major 7
-%endif
-%if 0%{?fedora} == 28
-%global clang_major 6
-%endif
+# versions. See also https://bugzilla.redhat.com/1544964.
 
 Name:          american-fuzzy-lop
 Version:       3.12c
@@ -42,7 +21,7 @@ Source1:       hello.c
 # without arch-specific changes.
 ExclusiveArch: %{ix86} x86_64
 
-BuildRequires: clang(major) = %{clang_major}
+BuildRequires: clang
 BuildRequires: llvm-devel
 BuildRequires: make
 
@@ -66,12 +45,15 @@ highly effective fuzzing strategies, requires essentially no
 configuration, and seamlessly handles complex, real-world use cases -
 say, common image parsing or file compression libraries.
 
+%global clang_major %(command -v clang >/dev/null && clang --version | sed -n -r 's/clang version ([0-9]+).*/\\1/p')
 
 %package clang
 Summary:       Clang and clang++ support for %{name}
 Requires:      %{name} = %{version}-%{release}
-Requires:      clang(major) = %{clang_major}
 
+%if "%{clang_major}" != ""
+Requires:      clang(major) = %{clang_major}
+%endif
 
 %description clang
 This subpackage contains clang and clang++ support for
@@ -138,6 +120,8 @@ ln -s %{SOURCE1} hello.cpp
 ./afl-clang-fast++ hello.cpp -o hello
 ./hello
 
+# Also check that we got the %%clang_major macro
+test -n '%{clang_major}'
 
 %files
 %license docs/COPYING
