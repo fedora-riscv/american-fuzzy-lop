@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       3.12c
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -195,6 +195,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Sat May 15 2021 Richard W.M. Jones <rjones@redhat.com> - 3.12c-3
+- Rebuild for previous commit.
+
 * Mon May 10 2021 Jonathan Wakely <jwakely@redhat.com> - 3.12c-2
 - Rebuilt for removed libstdc++ symbols (#1937698)
 
