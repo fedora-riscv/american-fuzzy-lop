@@ -3,8 +3,8 @@
 # versions. See also https://bugzilla.redhat.com/1544964.
 
 Name:          american-fuzzy-lop
-Version:       3.12c
-Release:       3%{?dist}
+Version:       3.13c
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -195,6 +195,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Tue Jun 01 2021 Richard W.M. Jones <rjones@redhat.com> - 3.13c-1
+- New upstream version 3.13c (RHBZ#1966720).
+
 * Sat May 15 2021 Richard W.M. Jones <rjones@redhat.com> - 3.12c-3
 - Rebuild for previous commit.
 
