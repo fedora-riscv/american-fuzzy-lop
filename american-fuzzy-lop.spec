@@ -184,7 +184,6 @@ test -n '%{clang_major}'
 %{afl_helper_path}/dynamic_list.txt
 %{afl_helper_path}/libAFLDriver.a*
 %{afl_helper_path}/libAFLQemuDriver.a
-%{afl_helper_path}/libLLVMInsTrim.so
 %{afl_helper_path}/libdislocator.so
 %{afl_helper_path}/libtokencap.so
 %{afl_helper_path}/SanitizerCoveragePCGUARD.so
