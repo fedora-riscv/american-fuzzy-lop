@@ -3,7 +3,7 @@
 # versions. See also https://bugzilla.redhat.com/1544964.
 
 Name:          american-fuzzy-lop
-Version:       3.13c
+Version:       3.14c
 Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
@@ -128,12 +128,12 @@ test -n '%{clang_major}'
 %doc pkg-docs/*
 %{_bindir}/afl-analyze
 %{_bindir}/afl-cc
-   /usr/bin/afl-c++
+%{_bindir}/afl-c++
 %{_bindir}/afl-cmin
 %{_bindir}/afl-cmin.bash
 %{_bindir}/afl-fuzz
-   /usr/bin/afl-g++
-   /usr/bin/afl-gcc
+%{_bindir}/afl-g++
+%{_bindir}/afl-gcc
 %{_bindir}/afl-gotcpu
 %{_bindir}/afl-plot
 %{_bindir}/afl-showmap
@@ -180,6 +180,7 @@ test -n '%{clang_major}'
 %{afl_helper_path}/afl-llvm-pass.so
 %{afl_helper_path}/cmplog-instructions-pass.so
 %{afl_helper_path}/cmplog-routines-pass.so
+%{afl_helper_path}/cmplog-switches-pass.so
 %{afl_helper_path}/compare-transform-pass.so
 %{afl_helper_path}/dynamic_list.txt
 %{afl_helper_path}/libAFLDriver.a*
@@ -194,6 +195,11 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Mon Jul 19 2021 Richard W.M. Jones <rjones@redhat.com> - 3.14c-1
+- New upstream version 3.14c (RHBZ#1983648).
+- Remove a few rogue "/usr/bin" in %%files section.
+- Add new file to afl_helper_path.
+
 * Tue Jun 01 2021 Richard W.M. Jones <rjones@redhat.com> - 3.13c-1
 - New upstream version 3.13c (RHBZ#1966720).
 
