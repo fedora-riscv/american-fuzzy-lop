@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       3.14c
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -195,6 +195,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 3.14c-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Mon Jul 19 2021 Richard W.M. Jones <rjones@redhat.com> - 3.14c-1
 - New upstream version 3.14c (RHBZ#1983648).
 - Remove a few rogue "/usr/bin" in %%files section.
