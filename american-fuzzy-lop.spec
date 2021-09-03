@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       3.14c
-Release:       3%{?dist}
+Release:       5%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -16,10 +16,9 @@ Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar
 # For running the tests:
 Source1:       hello.c
 
-# Upstream includes armv7hl support as some non-integrated 'contrib'
-# files, so I have not enabled it here.  No other arch is supported
-# without arch-specific changes.
-ExclusiveArch: %{ix86} x86_64
+# Only specific architectures are supported by upstream.
+# On non-x86 only afl-clang-fast* are built.
+ExclusiveArch: %{ix86} x86_64 s390x
 
 BuildRequires: clang
 BuildRequires: llvm-devel
@@ -70,6 +69,9 @@ This subpackage contains clang and clang++ support for
 # interpret the .o/.a files.  Disable LTO for now
 %define _lto_cflags %{nil}
 
+%ifnarch %{ix86} x86_64
+AFL_NO_X86=1 \
+%endif
 CFLAGS="%{optflags}" \
 %{__make} %{?_smp_mflags} \
   PREFIX="%{_prefix}" \
@@ -81,12 +83,28 @@ CFLAGS="%{optflags}" \
 
 
 %install
+%ifnarch %{ix86} x86_64
+AFL_NO_X86=1 \
+%endif
 %{make_install} \
   PREFIX="%{_prefix}" \
   HELPER_PATH="%{afl_helper_path}" \
   DOC_PATH="%{_pkgdocdir}" \
   MAN_PATH="%{_mandir}/man8" \
   MISC_PATH="%{_pkgdocdir}"
+
+%ifnarch %{ix86} x86_64
+# On non-x86 these files are built and installed but they don't
+# function, so delete them.  Only afl-clang-fast* works.
+# afl-clang-fast* is a symlink to afl-cc / afl-c++ so we cannot delete
+# those binaries.
+rm $RPM_BUILD_ROOT%{_bindir}/afl-clang
+rm $RPM_BUILD_ROOT%{_bindir}/afl-clang++
+rm $RPM_BUILD_ROOT%{_bindir}/afl-gcc
+rm $RPM_BUILD_ROOT%{_bindir}/afl-g++
+rm $RPM_BUILD_ROOT%{_mandir}/man8/afl-cc.8*
+rm $RPM_BUILD_ROOT%{_mandir}/man8/afl-c++.8*
+%endif
 
 # Otherwise we see:
 # ERROR: No build ID note found in <.o file>
@@ -107,6 +125,7 @@ mv $RPM_BUILD_ROOT%{_pkgdocdir} pkg-docs
 # This just checks that simple programs can be compiled using
 # the compiler wrappers.
 ln -s %{SOURCE1} hello.cpp
+%ifarch %{ix86} x86_64
 ./afl-gcc %{SOURCE1} -o hello
 ./hello
 ./afl-g++ hello.cpp -o hello
@@ -115,6 +134,7 @@ ln -s %{SOURCE1} hello.cpp
 ./hello
 ./afl-clang++ hello.cpp -o hello
 ./hello
+%endif
 ./afl-clang-fast %{SOURCE1} -o hello
 ./hello
 ./afl-clang-fast++ hello.cpp -o hello
@@ -126,14 +146,16 @@ test -n '%{clang_major}'
 %files
 %license docs/COPYING
 %doc pkg-docs/*
+%ifarch %{ix86} x86_64
+%{_bindir}/afl-g++
+%{_bindir}/afl-gcc
+%endif
 %{_bindir}/afl-analyze
 %{_bindir}/afl-cc
 %{_bindir}/afl-c++
 %{_bindir}/afl-cmin
 %{_bindir}/afl-cmin.bash
 %{_bindir}/afl-fuzz
-%{_bindir}/afl-g++
-%{_bindir}/afl-gcc
 %{_bindir}/afl-gotcpu
 %{_bindir}/afl-plot
 %{_bindir}/afl-showmap
@@ -149,10 +171,12 @@ test -n '%{clang_major}'
 %{afl_helper_path}/afl-compiler-rt-64.o
 %endif
 %{afl_helper_path}/afl-compiler-rt.o
-%{_mandir}/man8/afl-analyze.8*
-%{_mandir}/man8/afl-as.8*
+%ifarch %{ix86} x86_64
 %{_mandir}/man8/afl-c++.8*
 %{_mandir}/man8/afl-cc.8*
+%endif
+%{_mandir}/man8/afl-analyze.8*
+%{_mandir}/man8/afl-as.8*
 %{_mandir}/man8/afl-cmin.8*
 %{_mandir}/man8/afl-cmin.bash.8*
 %{_mandir}/man8/afl-fuzz.8*
@@ -166,8 +190,10 @@ test -n '%{clang_major}'
 
 %files clang
 %license docs/COPYING
+%ifarch %{ix86} x86_64
 %{_bindir}/afl-clang
 %{_bindir}/afl-clang++
+%endif
 %{_bindir}/afl-clang-fast
 %{_bindir}/afl-clang-fast++
 %if 0%{?__isa_bits} == 32
@@ -195,6 +221,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Fri Sep 03 2021 Richard W.M. Jones <rjones@redhat.com> - 3.14c-5
+- Add support for s390x (RHBZ#2000116)
+
 * Wed Aug 18 2021 Richard W.M. Jones <rjones@redhat.com> - 3.14c-3
 - Rebuild for clang 13.
 
