@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       3.14c
-Release:       5%{?dist}
+Release:       6%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -221,6 +221,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Tue Nov 09 2021 Tom Stellard <tstellar@redhat.com> - 3.14c-6
+- Rebuild for llvm-13.0.0
+
 * Fri Sep 03 2021 Richard W.M. Jones <rjones@redhat.com> - 3.14c-5
 - Add support for s390x (RHBZ#2000116)
 
