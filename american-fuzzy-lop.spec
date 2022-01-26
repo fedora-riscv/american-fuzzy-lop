@@ -3,8 +3,8 @@
 # versions. See also https://bugzilla.redhat.com/1544964.
 
 Name:          american-fuzzy-lop
-Version:       3.14c
-Release:       7%{?dist}
+Version:       4.00c
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -157,6 +157,7 @@ test -n '%{clang_major}'
 %{_bindir}/afl-cmin.bash
 %{_bindir}/afl-fuzz
 %{_bindir}/afl-gotcpu
+%{_bindir}/afl-persistent-config
 %{_bindir}/afl-plot
 %{_bindir}/afl-showmap
 %{_bindir}/afl-system-config
@@ -182,6 +183,7 @@ test -n '%{clang_major}'
 %{_mandir}/man8/afl-fuzz.8*
 %{_mandir}/man8/afl-gotcpu.8*
 %{_mandir}/man8/afl-plot.8*
+%{_mandir}/man8/afl-persistent-config.8*
 %{_mandir}/man8/afl-showmap.8*
 %{_mandir}/man8/afl-system-config.8*
 %{_mandir}/man8/afl-tmin.8*
@@ -221,6 +223,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Wed Jan 26 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-1
+- New upstream version 4.00c (RHBZ#2046452)
+
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 3.14c-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
