@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       4.00c
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -23,6 +23,9 @@ ExclusiveArch: %{ix86} x86_64 s390x
 BuildRequires: clang
 BuildRequires: llvm-devel
 BuildRequires: make
+%ifarch %{ix86} x86_64
+BuildRequires: lld
+%endif
 
 Requires:      gcc
 
@@ -52,6 +55,9 @@ Requires:      %{name} = %{version}-%{release}
 
 %if "%{clang_major}" != ""
 Requires:      clang(major) = %{clang_major}
+%endif
+%ifarch %{ix86} x86_64
+Requires:      lld
 %endif
 
 %description clang
@@ -115,6 +121,7 @@ chmod -x $RPM_BUILD_ROOT%{afl_helper_path}/*.o
 %if 0%{?__isa_bits} == 64
 rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-compiler-rt-32.o
 rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-llvm-rt-32.o
+rm -f $RPM_BUILD_ROOT%{afl_helper_path}/afl-llvm-rt-lto-32.o
 %endif
 
 # Remove docs since we will package them using %%doc.
@@ -192,20 +199,43 @@ test -n '%{clang_major}'
 
 %files clang
 %license docs/COPYING
+
 %ifarch %{ix86} x86_64
 %{_bindir}/afl-clang
 %{_bindir}/afl-clang++
 %endif
 %{_bindir}/afl-clang-fast
 %{_bindir}/afl-clang-fast++
+%ifarch %{ix86} x86_64
+%{_bindir}/afl-clang-lto
+%{_bindir}/afl-clang-lto++
+%{_bindir}/afl-ld-lto
+%{_bindir}/afl-lto
+%{_bindir}/afl-lto++
+%endif
+
+%{afl_helper_path}/afl-llvm-dict2file.so
+%ifarch %{ix86} x86_64
+%{afl_helper_path}/afl-llvm-lto-instrumentlist.so
+%endif
+%{afl_helper_path}/afl-llvm-pass.so
+
 %if 0%{?__isa_bits} == 32
 %{afl_helper_path}/afl-llvm-rt-32.o
 %else
 %{afl_helper_path}/afl-llvm-rt-64.o
 %endif
 %{afl_helper_path}/afl-llvm-rt.o
-%{afl_helper_path}/afl-llvm-dict2file.so
-%{afl_helper_path}/afl-llvm-pass.so
+
+%ifarch %{ix86} x86_64
+%if 0%{?__isa_bits} == 32
+%{afl_helper_path}/afl-llvm-rt-lto-32.o
+%else
+%{afl_helper_path}/afl-llvm-rt-lto-64.o
+%endif
+%{afl_helper_path}/afl-llvm-rt-lto.o
+%endif
+
 %{afl_helper_path}/cmplog-instructions-pass.so
 %{afl_helper_path}/cmplog-routines-pass.so
 %{afl_helper_path}/cmplog-switches-pass.so
@@ -215,14 +245,27 @@ test -n '%{clang_major}'
 %{afl_helper_path}/libAFLQemuDriver.a
 %{afl_helper_path}/libdislocator.so
 %{afl_helper_path}/libtokencap.so
+%ifarch %{ix86} x86_64
+%{afl_helper_path}/SanitizerCoverageLTO.so
+%endif
 %{afl_helper_path}/SanitizerCoveragePCGUARD.so
 %{afl_helper_path}/split-compares-pass.so
 %{afl_helper_path}/split-switches-pass.so
+
 %{_mandir}/man8/afl-clang-fast.8*
 %{_mandir}/man8/afl-clang-fast++.8*
+%ifarch %{ix86} x86_64
+%{_mandir}/man8/afl-clang-lto.8.gz
+%{_mandir}/man8/afl-clang-lto++.8.gz
+%{_mandir}/man8/afl-lto.8.gz
+%{_mandir}/man8/afl-lto++.8.gz
+%endif
 
 
 %changelog
+* Fri Mar 18 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-2
+- Enable clang-LTO support.
+
 * Wed Jan 26 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-1
 - New upstream version 4.00c (RHBZ#2046452)
 
