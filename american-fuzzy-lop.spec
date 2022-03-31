@@ -4,17 +4,24 @@
 
 Name:          american-fuzzy-lop
 Version:       4.00c
-Release:       3%{?dist}
+Release:       3.git285a5cb3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
 License:       ASL 2.0
 
 URL:           https://aflplus.plus/
-Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
+#Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
+# 4.00c is broken with clang 14, fixed by upstream patches.  This
+# tarball contains everything upstream to 285a5cb3.
+Source0:       4.00c-git285a5cb3.tar.gz
 
 # For running the tests:
 Source1:       hello.c
+
+# Avoid creating circular links.
+# https://github.com/AFLplusplus/AFLplusplus/pull/1373
+Patch1:        0001-GNUmakefile.llvm-Avoid-creating-circular-links.patch
 
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
@@ -66,7 +73,7 @@ This subpackage contains clang and clang++ support for
 
 
 %prep
-%setup -q -n AFLplusplus-%{version}
+%autosetup -p1 -n AFLplusplus-%{version}
 
 
 %build
@@ -220,13 +227,6 @@ test -n '%{clang_major}'
 %endif
 %{afl_helper_path}/afl-llvm-pass.so
 
-%if 0%{?__isa_bits} == 32
-%{afl_helper_path}/afl-llvm-rt-32.o
-%else
-%{afl_helper_path}/afl-llvm-rt-64.o
-%endif
-%{afl_helper_path}/afl-llvm-rt.o
-
 %ifarch %{ix86} x86_64
 %if 0%{?__isa_bits} == 32
 %{afl_helper_path}/afl-llvm-rt-lto-32.o
@@ -265,6 +265,7 @@ test -n '%{clang_major}'
 %changelog
 * Thu Mar 31 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-3
 - Rebuild for clang 14
+- Add upstream patches to commit 285a5cb3.
 
 * Fri Mar 18 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-2
 - Enable clang-LTO support.
