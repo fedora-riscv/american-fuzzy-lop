@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       4.00c
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -263,6 +263,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Thu Mar 31 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-3
+- Rebuild for clang 14
+
 * Fri Mar 18 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-2
 - Enable clang-LTO support.
 
