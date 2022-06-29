@@ -3,25 +3,18 @@
 # versions. See also https://bugzilla.redhat.com/1544964.
 
 Name:          american-fuzzy-lop
-Version:       4.00c
-Release:       3.git285a5cb3%{?dist}
+Version:       4.01c
+Release:       1%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
 License:       ASL 2.0
 
 URL:           https://aflplus.plus/
-#Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
-# 4.00c is broken with clang 14, fixed by upstream patches.  This
-# tarball contains everything upstream to 285a5cb3.
-Source0:       4.00c-git285a5cb3.tar.gz
+Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
 
 # For running the tests:
 Source1:       hello.c
-
-# Avoid creating circular links.
-# https://github.com/AFLplusplus/AFLplusplus/pull/1373
-Patch1:        0001-GNUmakefile.llvm-Avoid-creating-circular-links.patch
 
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
@@ -263,6 +256,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Wed Jun 29 2022 Richard W.M. Jones <rjones@redhat.com> - 4.01c-1
+- New upstream version 4.01c (RHBZ#2101976)
+
 * Thu Mar 31 2022 Richard W.M. Jones <rjones@redhat.com> - 4.00c-3
 - Rebuild for clang 14
 - Add upstream patches to commit 285a5cb3.
