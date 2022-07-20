@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       4.01c
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -256,6 +256,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 4.01c-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Wed Jun 29 2022 Richard W.M. Jones <rjones@redhat.com> - 4.01c-1
 - New upstream version 4.01c (RHBZ#2101976)
 
