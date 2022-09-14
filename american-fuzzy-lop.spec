@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       4.02c
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -15,6 +15,9 @@ Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar
 
 # For running the tests:
 Source1:       hello.c
+
+# LLVM 15 compat fixes from https://github.com/AFLplusplus/AFLplusplus/pull/1518.
+Patch0:        fix-llvm-15-build.patch
 
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
@@ -47,15 +50,11 @@ highly effective fuzzing strategies, requires essentially no
 configuration, and seamlessly handles complex, real-world use cases -
 say, common image parsing or file compression libraries.
 
-%global clang_major %(command -v clang >/dev/null && clang --version | sed -n -r 's/clang version ([0-9]+).*/\\1/p')
-
 %package clang
 Summary:       Clang and clang++ support for %{name}
 Requires:      %{name} = %{version}-%{release}
 
-%if "%{clang_major}" != ""
-Requires:      clang(major) = %{clang_major}
-%endif
+Requires:      clang(major) = %{clang_major_version}
 %ifarch %{ix86} x86_64
 Requires:      lld
 %endif
@@ -147,8 +146,8 @@ ln -s %{SOURCE1} hello.cpp
 ./afl-clang-fast++ hello.cpp -o hello
 ./hello
 
-# Also check that we got the %%clang_major macro
-test -n '%{clang_major}'
+# Also check that we got the %%clang_major_version macro
+test -n '%{clang_major_version}'
 
 %files
 %license docs/COPYING
@@ -256,6 +255,9 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Wed Sep 14 2022 Nikita Popov <npopov@redhat.com> - 4.02c-2
+- Rebuild against LLVM 15
+
 * Tue Aug 09 2022 Richard W.M. Jones <rjones@redhat.com> - 4.02c-1
 - New upstream version 4.02c (RHBZ#2116584)
 
