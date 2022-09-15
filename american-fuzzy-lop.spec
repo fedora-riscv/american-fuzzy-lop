@@ -4,7 +4,7 @@
 
 Name:          american-fuzzy-lop
 Version:       4.02c
-Release:       2%{?dist}
+Release:       3%{?dist}
 
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 
@@ -50,11 +50,15 @@ highly effective fuzzing strategies, requires essentially no
 configuration, and seamlessly handles complex, real-world use cases -
 say, common image parsing or file compression libraries.
 
+%global clang_major %(command -v clang >/dev/null && clang --version | sed -n -r 's/clang version ([0-9]+).*/\\1/p')
+
 %package clang
 Summary:       Clang and clang++ support for %{name}
 Requires:      %{name} = %{version}-%{release}
 
-Requires:      clang(major) = %{clang_major_version}
+%if "%{clang_major}" != ""
+Requires:      clang(major) = %{clang_major}
+%endif
 %ifarch %{ix86} x86_64
 Requires:      lld
 %endif
@@ -146,8 +150,8 @@ ln -s %{SOURCE1} hello.cpp
 ./afl-clang-fast++ hello.cpp -o hello
 ./hello
 
-# Also check that we got the %%clang_major_version macro
-test -n '%{clang_major_version}'
+# Also check that we got the %%clang_major macro
+test -n '%{clang_major}'
 
 %files
 %license docs/COPYING
@@ -255,6 +259,9 @@ test -n '%{clang_major_version}'
 
 
 %changelog
+* Thu Sep 15 2022 Nikita Popov <npopov@redhat.com> - 4.02c-3
+- Restore previous clang_major macro
+
 * Wed Sep 14 2022 Nikita Popov <npopov@redhat.com> - 4.02c-2
 - Rebuild against LLVM 15
 
