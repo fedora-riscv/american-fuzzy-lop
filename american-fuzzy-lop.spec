@@ -2,22 +2,20 @@
 # changes, since clang releases are not ABI compatible between major
 # versions. See also https://bugzilla.redhat.com/1544964.
 
+Version:       4.03c
+%global forgeurl https://github.com/AFLplusplus/AFLplusplus/
+%forgemeta
+
 Name:          american-fuzzy-lop
-Version:       4.02c
-Release:       3%{?dist}
-
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
-
 License:       ASL 2.0
 
-URL:           https://aflplus.plus/
-Source0:       https://github.com/AFLplusplus/AFLplusplus/archive/%{version}.tar.gz
+Release:       1%{?dist}
+URL:           %{forgeurl}
+Source0:       %{forgesource}
 
 # For running the tests:
 Source1:       hello.c
-
-# LLVM 15 compat fixes from https://github.com/AFLplusplus/AFLplusplus/pull/1518.
-Patch0:        fix-llvm-15-build.patch
 
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
@@ -69,7 +67,7 @@ This subpackage contains clang and clang++ support for
 
 
 %prep
-%autosetup -p1 -n AFLplusplus-%{version}
+%forgesetup
 
 
 %build
@@ -259,6 +257,10 @@ test -n '%{clang_major}'
 
 
 %changelog
+* Tue Sep 20 2022 Richard W.M. Jones <rjones@redhat.com> - 4.03c-1
+- New upstream version 4.03c (RHBZ#2128509)
+- Remove patch which is now upstream.
+
 * Thu Sep 15 2022 Nikita Popov <npopov@redhat.com> - 4.02c-3
 - Restore previous clang_major macro
 
