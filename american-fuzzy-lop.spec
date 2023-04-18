@@ -18,9 +18,6 @@ Source0:       %{forgesource}
 # For running the tests:
 Source1:       hello.c
 
-# Taken from https://github.com/AFLplusplus/AFLplusplus/pull/1686
-Patch1: pr1686.diff
-
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
 ExclusiveArch: %{ix86} x86_64 s390x
