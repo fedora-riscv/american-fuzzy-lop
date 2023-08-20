@@ -11,7 +11,7 @@ Name:          american-fuzzy-lop
 Summary:       Practical, instrumentation-driven fuzzer for binary formats
 License:       ASL 2.0
 
-Release:       4%{?dist}
+Release:       4.rv64%{?dist}
 URL:           %{forgeurl}
 Source0:       %{forgesource}
 
@@ -23,7 +23,7 @@ Patch1: pr1686.diff
 
 # Only specific architectures are supported by upstream.
 # On non-x86 only afl-clang-fast* are built.
-ExclusiveArch: %{ix86} x86_64 s390x
+ExclusiveArch: %{ix86} x86_64 s390x riscv64
 
 BuildRequires: clang
 BuildRequires: llvm-devel
